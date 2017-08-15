@@ -53,7 +53,7 @@ def game_new(request):
     redis_handler.set(deck_id, json.dumps(cards))
     redis_handler.expire(deck_id, config['redis']['ttl'])
 
-    return request.Response(text=str(response))
+    return request.Response(json=response)
 
 def game_resume(request):
     deck_id = request.match_dict['deck_id']
@@ -78,7 +78,7 @@ def game_resume(request):
         'left': len(cards)
     }
 
-    return request.Response(text=str(response))
+    return request.Response(json=response)
 
 if __name__ == '__main__':
     config_fname = sys.argv[1] if len(sys.argv) >= 2 else None
@@ -104,6 +104,7 @@ if __name__ == '__main__':
     app = Application()
 
     app.router.add_route('/', help_show)
+    app.router.add_route('/deal/new', game_new)
     app.router.add_route('/deal/new/', game_new)
     app.router.add_route('/deal/new/{deck_type}/', game_new)
     app.router.add_route('/deal/{deck_id}/', game_resume)
