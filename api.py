@@ -44,9 +44,9 @@ def game_new(request):
     deck_id = m.hexdigest()
 
     response = {
+        'id': deck_id,
         'type': deck_type,
         'card': card,
-        'id': deck_id,
         'left': len(cards)
     }
 
@@ -73,8 +73,8 @@ def game_resume(request):
         card = None
 
     response = {
-        'card': card,
         'id': deck_id,
+        'card': card,
         'left': len(cards)
     }
 
