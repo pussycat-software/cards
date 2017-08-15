@@ -8,20 +8,26 @@ It just gives out cards.
 
 ```
 GET     /game/new/
+
     start new game of default type
     set such in config file
 
 GET     /game/new/fr/
+
     start new french deck game
     52 cards
     from 2 to Aces, no Jokers
+
 GET     /game/new/ru/
+
     start new russian deck game
     36 cards
     from 6 to Aces, no Jokers
 
 GET     /game/{game_id}/
+
     resume an old game
+
 ```
 
 Each card given is encoded with 2-symbols:
