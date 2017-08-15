@@ -9,7 +9,7 @@ import time
 import hashlib
 import redis
 
-from lib.cards import Cards
+from lib.decks import Decks
 
 def config_load(fname='./config.yml'):
     return yaml.load(open(fname).read())
@@ -20,58 +20,62 @@ def help_show(request):
     return request.Response(text=help_text)
 
 def game_new(request):
-    game_type = request.match_dict['type']
-    if game_type in ('ru', 'russian'):
-        cards = list(Cards.russian)
-    elif game_type in ('fr', 'french'):
-        cards = list(Cards.french)
+    try:
+        deck_type = request.match_dict['deck_type']
+    except:
+        deck_type = config['game']['default_type']
+
+    if deck_type in ('ru', 'russian'):
+        cards = list(decks.russian)
+    elif deck_type in ('fr', 'french'):
+        cards = list(decks.french)
     else:
         return request.Response(code=400)
 
     card = random.choice(cards)
-    cards.remove(first_card)
+    cards.remove(card)
 
     m = hashlib.md5()
-    game_id = '%s_%f' % (
+    deck_id = '%s_%f' % (
         request.remote_addr,
         time.time()
     )
-    m.update(game_id.encode())
-    game_id = m.hexdigest()
+    m.update(deck_id.encode())
+    deck_id = m.hexdigest()
 
     response = {
-        'type': game_type,
+        'type': deck_type,
         'card': card,
-        'id': game_id,
-        'cards_left': len(cards)
+        'id': deck_id,
+        'left': len(cards)
     }
 
-    redis_handler.set(game_id, json.dumps(cards))
-    redis_handler.expire(game_id, config['redis']['ttl'])
+    redis_handler.set(deck_id, json.dumps(cards))
+    redis_handler.expire(deck_id, config['redis']['ttl'])
 
     return request.Response(text=str(response))
 
 def game_resume(request):
-    game_id = request.match_dict['game_id']
+    deck_id = request.match_dict['deck_id']
 
     try:
-        cards = json.loads(redis_handler.get(game_id).decode())
+        cards = json.loads(redis_handler.get(deck_id).decode())
     except:
         cards = []
 
     if len(cards) > 0:
         card = random.choice(cards)
-        cards.remove(new_card)
+        cards.remove(card)
 
-        redis_handler.set(game_id, json.dumps(cards))
-        redis_handler.expire(game_id, config['redis']['ttl'])
+        redis_handler.set(deck_id, json.dumps(cards))
+        redis_handler.expire(deck_id, config['redis']['ttl'])
     else:
         card = None
 
     response = {
         'card': card,
-        'id': game_id,
-        'cards_left': len(cards)
+        'id': deck_id,
+        'left': len(cards)
     }
 
     return request.Response(text=str(response))
@@ -86,6 +90,8 @@ if __name__ == '__main__':
         print('Usage:\n\t./%s [./config.yml]' % (sys.argv[0]))
         sys.exit(1)
 
+    decks = Decks()
+
     redis_handler = redis.Redis(
         host=config['redis']['host'],
         port=config['redis']['port'],
@@ -95,8 +101,9 @@ if __name__ == '__main__':
     app = Application()
 
     app.router.add_route('/', help_show)
-    app.router.add_route('/new/{type}/', game_new)
-    app.router.add_route('/game/{game_id}/', game_resume)
+    app.router.add_route('/game/new/', game_new)
+    app.router.add_route('/game/new/{deck_type}/', game_new)
+    app.router.add_route('/game/{deck_id}/', game_resume)
 
     app.run(
         debug=config['debug'],
