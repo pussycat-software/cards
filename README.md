@@ -7,27 +7,26 @@ It just gives out cards.
 # Usage
 
 ```
-GET     /game/new/
+GET     /deal/new/
 
     start new game of default type
     set such in config file
 
-GET     /game/new/fr/
+GET     /deal/new/fr/
 
     start new french deck game
     52 cards
     from 2 to Aces, no Jokers
 
-GET     /game/new/ru/
+GET     /deal/new/ru/
 
     start new russian deck game
     36 cards
     from 6 to Aces, no Jokers
 
-GET     /game/{game_id}/
+GET     /deal/{deck_id}/
 
     resume an old game
-
 ```
 
 Each card given is encoded with 2-symbols:
@@ -50,21 +49,21 @@ Watch out, old games data is erased after default TTL of 1 hour expired.
 Following example is using [httpie](https://httpie.org/):
 
 ```
-$ http http://cards/game/new/
+$ http http://cards/deal/new/
 HTTP/1.1 200 OK
 {'type': 'fr', 'card': '4h', 'id': 'c727058430d21b07f9e90795e64ef401', 'left': 51}
 
-$ http http://cards/game/c727058430d21b07f9e90795e64ef401/
+$ http http://cards/deal/c727058430d21b07f9e90795e64ef401/
 HTTP/1.1 200 OK
 {'card': 'ks', 'id': 'c727058430d21b07f9e90795e64ef401', 'left': 50}
 
 # Requesting more cards ...
 
-$ http http://cards/game/c727058430d21b07f9e90795e64ef401/
+$ http http://cards/deal/c727058430d21b07f9e90795e64ef401/
 HTTP/1.1 200 OK
 {'card': '4h', 'id': 'c727058430d21b07f9e90795e64ef401', 'left': 0}
 
-$ http http://cards/game/c727058430d21b07f9e90795e64ef401/
+$ http http://cards/deal/c727058430d21b07f9e90795e64ef401/
 HTTP/1.1 200 OK
 {'card': None, 'id': 'c727058430d21b07f9e90795e64ef401', 'left': 0}
 ```

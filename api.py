@@ -104,9 +104,9 @@ if __name__ == '__main__':
     app = Application()
 
     app.router.add_route('/', help_show)
-    app.router.add_route('/game/new/', game_new)
-    app.router.add_route('/game/new/{deck_type}/', game_new)
-    app.router.add_route('/game/{deck_id}/', game_resume)
+    app.router.add_route('/deal/new/', game_new)
+    app.router.add_route('/deal/new/{deck_type}/', game_new)
+    app.router.add_route('/deal/{deck_id}/', game_resume)
 
     app.run(
         debug=config['debug'],

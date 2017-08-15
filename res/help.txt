@@ -1,20 +1,20 @@
-GET     /game/new/
+GET     /deal/new/
 
     start new game of default type
     set such in config file
 
-GET     /game/new/fr/
+GET     /deal/new/fr/
 
     start new french deck game
     52 cards
     from 2 to Aces, no Jokers
 
-GET     /game/new/ru/
+GET     /deal/new/ru/
 
     start new russian deck game
     36 cards
     from 6 to Aces, no Jokers
 
-GET     /game/{game_id}/
+GET     /deal/{deck_id}/
 
     resume an old game
