@@ -33,7 +33,7 @@ Each card given is encoded with 2-symbols:
 
 ```
 2h - 2 of Hearts
-6d - 6 of Diamonds
+0d - 10 of Diamonds
 jc - Jack of Clubs
 as - Ace of Spades
 ```
