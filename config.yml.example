@@ -1,0 +1,11 @@
+---
+
+debug: false
+listen:
+  host: 0.0.0.0
+  port: 8098
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: ''
+  ttl: 3600

@@ -1,0 +1,7 @@
+new/fr/
+    start new french suits game, 52 cards
+new/ru/
+    start new russian suits game, 36 cards
+
+game/{game_id}/
+    resume game
