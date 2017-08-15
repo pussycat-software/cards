@@ -1,4 +1,4 @@
-class Cards(object):
+class Decks(object):
     def __init__(self):
         # h - hearts
         # d - diamonds
