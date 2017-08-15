@@ -84,10 +84,13 @@ if __name__ == '__main__':
     config_fname = sys.argv[1] if len(sys.argv) >= 2 else None
 
     try:
-        config = config_load(config_fname)
+        if config_fname:
+            config = config_load(config_fname)
+        else:
+            config = config_load()
     except:
         print('Error, could not load config')
-        print('Usage:\n\t./%s [./config.yml]' % (sys.argv[0]))
+        print('Usage:\n\t%s [./config.yml]' % (sys.argv[0]))
         sys.exit(1)
 
     decks = Decks()
