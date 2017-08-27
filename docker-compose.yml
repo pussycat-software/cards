@@ -5,10 +5,12 @@ services:
   web:
     build: .
     ports:
-      - "8098:8098"
+      - '8098:8098'
     volumes:
       - .:/code
     links:
       - redis
+    restart: 'always'
   redis:
-    image: "redis:alpine"
+    image: 'redis:alpine'
+    restart: 'always'
