@@ -8,9 +8,11 @@ services:
       - '8098:8098'
     volumes:
       - .:/code
+      - ./config.yml.docker:/code/config.yml
     links:
       - redis
     restart: 'always'
+
   redis:
     image: 'redis:alpine'
     restart: 'always'

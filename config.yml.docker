@@ -1,0 +1,13 @@
+---
+
+debug: false
+game:
+  default_type: fr
+listen:
+  host: 0.0.0.0
+  port: 8098
+redis:
+  host: redis
+  port: 6379
+  password: ''
+  ttl: 3600
