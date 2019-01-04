@@ -11,18 +11,21 @@ import redis
 
 from lib.decks import Decks
 
+
 def config_load(fname='./config.yml'):
     return yaml.load(open(fname).read())
+
 
 def help_show(request):
     help_text = open('./res/help.txt').read()
 
     return request.Response(text=help_text)
 
+
 def game_new(request):
     try:
         deck_type = request.match_dict['deck_type']
-    except:
+    except KeyError:
         deck_type = config['game']['default_type']
 
     if deck_type in ('ru', 'russian'):
@@ -55,12 +58,13 @@ def game_new(request):
 
     return request.Response(json=response)
 
+
 def game_resume(request):
     deck_id = request.match_dict['deck_id']
 
     try:
         cards = json.loads(redis_handler.get(deck_id).decode())
-    except:
+    except ValueError:
         cards = []
 
     if len(cards) > 0:
@@ -80,6 +84,7 @@ def game_resume(request):
 
     return request.Response(json=response)
 
+
 if __name__ == '__main__':
     config_fname = sys.argv[1] if len(sys.argv) >= 2 else None
 
@@ -88,7 +93,7 @@ if __name__ == '__main__':
             config = config_load(config_fname)
         else:
             config = config_load()
-    except:
+    except (OSError, ValueError):
         print('Error, could not load config')
         print('Usage:\n\t%s [./config.yml]' % (sys.argv[0]))
         sys.exit(1)
