@@ -8,7 +8,7 @@ services:
       - '8098:8098'
     volumes:
       - .:/code
-      - ./config.yml.docker:/code/config.yml
+      - ./misc/config-docker.yml:/code/config.yml
     links:
       - redis
     restart: 'always'
